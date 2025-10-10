@@ -1,6 +1,7 @@
 
-function App() {
-  // Static UI only, no logic
+import { type FC } from 'react';
+
+export const App: FC = () => {
   return (
     <div className="min-h-screen bg-zinc-900 flex items-center justify-center py-10">
       <div className="w-full max-w-md bg-zinc-800 rounded-2xl shadow-2xl p-8">
@@ -37,5 +38,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
+export default App;
