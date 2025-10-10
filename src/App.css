@@ -1,0 +1,173 @@
+body {
+  background: #18181b;
+  color: #f4f4f5;
+  font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.task-app-container {
+  max-width: 480px;
+  margin: 40px auto;
+  background: #23232a;
+  border-radius: 18px;
+  box-shadow: 0 4px 32px #000a;
+  padding: 32px 28px 28px 28px;
+}
+
+.task-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 28px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+.task-input,
+.task-textarea {
+  background: #18181b;
+  border: 1.5px solid #33334d;
+  color: #f4f4f5;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+.task-input:focus,
+.task-textarea:focus {
+  border: 1.5px solid #6366f1;
+  outline: none;
+}
+.task-textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+.task-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  margin-right: 8px;
+}
+.add-btn {
+  background: linear-gradient(90deg, #6366f1 60%, #818cf8 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px #6366f133;
+}
+.add-btn:hover {
+  background: linear-gradient(90deg, #818cf8 60%, #6366f1 100%);
+}
+.edit-btn {
+  background: #18181b;
+  color: #fbbf24;
+  border: 1.5px solid #fbbf24;
+}
+.edit-btn:hover {
+  background: #fbbf24;
+  color: #18181b;
+}
+.delete-btn {
+  background: #18181b;
+  color: #ef4444;
+  border: 1.5px solid #ef4444;
+}
+.delete-btn:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+.task-list {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.task-card {
+  background: #18181b;
+  border: 1.5px solid #33334d;
+  border-radius: 12px;
+  padding: 18px 16px 14px 16px;
+  box-shadow: 0 2px 12px #0002;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.task-card-content {
+  margin-bottom: 8px;
+}
+.task-card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #fff;
+}
+.task-card-desc {
+  font-size: 1rem;
+  color: #d4d4d8;
+  margin: 0;
+}
+.task-card-actions {
+  display: flex;
+  gap: 10px;
+}
+.empty-tasks {
+  text-align: center;
+  color: #71717a;
+  font-size: 1.1rem;
+  margin-top: 18px;
+}
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
