@@ -11,16 +11,13 @@ export const App: FC = () => {
             className="px-4 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white placeholder-zinc-400 focus:outline-none focus:border-indigo-500 transition"
             type="text"
             placeholder="Task Title"
-            disabled
           />
           <textarea
             className="px-4 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white placeholder-zinc-400 focus:outline-none focus:border-indigo-500 transition min-h-[56px] resize-y"
             placeholder="Task Description"
-            disabled
           />
           <button
             className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 rounded-lg transition shadow"
-            disabled
           >
             Add Task
           </button>
