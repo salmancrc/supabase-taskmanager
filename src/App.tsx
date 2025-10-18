@@ -44,6 +44,8 @@ export const App: FC = () => {
       console.error("Error deleting task:", error.message);
       return;
     }
+
+    getTasks();
   }
 
   return (
