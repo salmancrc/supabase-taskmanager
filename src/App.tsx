@@ -75,6 +75,8 @@ export const App: FC = () => {
     await getTasks();
   };
 
+  console.log("Rendering App with tasks:", tasks);
+
   return (
     <div className="min-h-screen bg-zinc-900 flex items-center justify-center py-10">
       <div className="w-full max-w-md bg-zinc-800 rounded-2xl shadow-2xl p-8">
