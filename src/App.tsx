@@ -1,4 +1,4 @@
-
+// src/App.tsx
 import React, { useState, useEffect } from 'react';
 import type { FC } from 'react';
 import { supabase } from './supabase.client';
@@ -7,7 +7,7 @@ interface Task {
   id: number;
   title: string;
   description: string;
-  created_at: string;
+  created_at?: string;
 }
 
 export const App: FC = () => {
@@ -20,43 +20,42 @@ export const App: FC = () => {
   }, []);
 
   const getTasks = async () => {
-    const { data } = await supabase.from("tasks").select("*");
-    if (data) setTasks(data);
-  }
+    const { data, error } = await supabase.from("tasks").select("*").order("id", { ascending: false });
+    if (error) {
+      console.error("getTasks error:", error.message);
+      return;
+    }
+    setTasks(data ?? []);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { error } = await supabase.from("tasks").insert(newtask).single();
-
     if (error) {
       console.error("Error adding task:", error.message);
       return;
     }
 
     setNewTask({ title: "", description: "" });
-    getTasks();
-  }
+    await getTasks();
+  };
 
-  const handleEditTask = async (id: number) => {
-    setEditingTask(id)
-  }
-  
-  useEffect(() => {
-    console.log("Editing task ID:", editingTask);
-  }, [editingTask]);
-  
+  const handleEditTask = (id: number) => {
+    const task = tasks.find((t) => t.id === id);
+    if (!task) return;
+    setNewTask({ title: task.title, description: task.description });
+    setEditingTask(id);
+  };
 
   const deleteTask = async (id: number) => {
     const { error } = await supabase.from("tasks").delete().eq("id", id);
-
     if (error) {
       console.error("Error deleting task:", error.message);
       return;
     }
-
-    getTasks();
-  }
+    await getTasks();
+  };
 
   return (
     <div className="min-h-screen bg-zinc-900 flex items-center justify-center py-10">
@@ -76,14 +75,17 @@ export const App: FC = () => {
             value={newtask.description}
             onChange={(e) => setNewTask((prev) => ({ ...prev, description: e.target.value }))}
           />
-          <button
-            className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 rounded-lg transition shadow"
-          >
-            Add Task
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="submit"
+              className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 rounded-lg transition shadow flex-1"
+            >
+              {editingTask !== null ? "Update Task" : "Add Task"}
+            </button>
+          </div>
         </form>
 
-        <div className="space-y-6">
+        <div className="space-y-6 h-96 overflow-y-auto pr-2">
           {tasks.map(task => (
             <div key={task.id} className="bg-zinc-900 border border-zinc-700 rounded-xl p-5 flex flex-col gap-2">
               <h2 className="text-lg font-semibold text-white">{task.title}</h2>
@@ -100,4 +102,4 @@ export const App: FC = () => {
   );
 };
 
-export default App
+export default App;
