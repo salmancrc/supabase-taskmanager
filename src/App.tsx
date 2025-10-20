@@ -13,6 +13,7 @@ interface Task {
 export const App: FC = () => {
   const [newtask, setNewTask] = useState({ title: "", description: "" });
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [editingTask, setEditingTask] = useState<number | null>(null);
 
   useEffect(() => {
     getTasks();
@@ -36,6 +37,15 @@ export const App: FC = () => {
     setNewTask({ title: "", description: "" });
     getTasks();
   }
+
+  const handleEditTask = async (id: number) => {
+    setEditingTask(id)
+  }
+  
+  useEffect(() => {
+    console.log("Editing task ID:", editingTask);
+  }, [editingTask]);
+  
 
   const deleteTask = async (id: number) => {
     const { error } = await supabase.from("tasks").delete().eq("id", id);
@@ -79,7 +89,7 @@ export const App: FC = () => {
               <h2 className="text-lg font-semibold text-white">{task.title}</h2>
               <p className="text-zinc-300">{task.description}</p>
               <div className="flex gap-3 mt-2">
-                <button className="px-4 py-1 rounded-lg border border-amber-400 text-amber-400 hover:bg-amber-400 hover:text-zinc-900 font-medium transition">Edit</button>
+                <button onClick={() => handleEditTask(task.id)} className="px-4 py-1 rounded-lg border border-amber-400 text-amber-400 hover:bg-amber-400 hover:text-zinc-900 font-medium transition">Edit</button>
                 <button onClick={() => deleteTask(task.id)} className="px-4 py-1 rounded-lg border border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-medium transition">Delete</button>
               </div>
             </div>
