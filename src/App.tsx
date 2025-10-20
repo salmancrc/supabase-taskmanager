@@ -30,6 +30,24 @@ export const App: FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!newtask.title.trim()) return;
+
+    if (editingTask !== null) {
+      const { error } = await supabase
+        .from("tasks")
+        .update({ title: newtask.title, description: newtask.description })
+        .eq("id", editingTask);
+
+      if (error) {
+        console.error("Error updating task:", error.message);
+        return;
+      }
+
+      setEditingTask(null);
+      setNewTask({ title: "", description: "" });
+      await getTasks();
+      return;
+    }
 
     const { error } = await supabase.from("tasks").insert(newtask).single();
     if (error) {
