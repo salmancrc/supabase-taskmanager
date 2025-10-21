@@ -1,4 +1,3 @@
-// src/App.tsx
 import React, { useState, useEffect } from 'react';
 import type { FC } from 'react';
 import { supabase } from './supabase.client';
@@ -74,8 +73,6 @@ export const App: FC = () => {
     }
     await getTasks();
   };
-
-  console.log("Rendering App with tasks:", tasks);
 
   return (
     <div className="min-h-screen bg-zinc-900 flex items-center justify-center py-10">
