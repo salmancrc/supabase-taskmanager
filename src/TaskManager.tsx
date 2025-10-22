@@ -102,7 +102,7 @@ export const TaskManager: FC = () => {
           </div>
         </form>
 
-        <div className="space-y-6 min-h-max max-h-96 overflow-y-auto pr-2">
+        <div className="space-y-6 min-h-0 max-h-96 overflow-y-auto pr-2">
           {tasks.map(task => (
             <div key={task.id} className="bg-zinc-900 border border-zinc-700 rounded-xl p-5 flex flex-col gap-2">
               <h2 className="text-lg font-semibold text-white">{task.title}</h2>
