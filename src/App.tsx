@@ -8,17 +8,39 @@ export const App: FC = () => {
 
   const fetchSession = async () => {
     const currentSession = await supabase.auth.getSession();
-    setSession(currentSession.data);
+    console.log(currentSession)
+    setSession(currentSession.data.session);
   }
 
   useEffect(() => {
     fetchSession();
-    console.log(session)
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    }
   }, [])
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  }
 
   return (
     <>
-      {session ? <TaskManager /> : <Auth />}
+      {session ? (
+        <div className="min-h-screen bg-zinc-900 relative">
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="absolute top-6 right-6 bg-red-600 hover:bg-red-500 text-white font-semibold px-5 py-2 rounded-lg transition shadow z-50"
+          >
+            Logout
+          </button>
+          <TaskManager />
+        </div>
+      ) : (<Auth />)}
     </>
   );
 };
