@@ -9,7 +9,7 @@ interface TaskData {
   created_at?: string;
 }
 
-export const Task: FC = () => {
+export const TaskManager: FC = () => {
   const [newtask, setNewTask] = useState({ title: "", description: "" });
   const [tasks, setTasks] = useState<TaskData[]>([]);
   const [editingTask, setEditingTask] = useState<number | null>(null);
@@ -119,4 +119,4 @@ export const Task: FC = () => {
   );
 };
 
-export default Task;
+export default TaskManager;
