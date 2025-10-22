@@ -38,7 +38,7 @@ export const App: FC = () => {
           >
             Logout
           </button>
-          <TaskManager />
+          <TaskManager session={session} />
         </div>
       ) : (<Auth />)}
     </>
