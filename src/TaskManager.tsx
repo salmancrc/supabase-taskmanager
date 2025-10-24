@@ -22,21 +22,21 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
     getTasks();
   }, []);
 
-  // useEffect(() => {
-  //   const channel = supabase.channel("tasks-channel");
-  //   channel
-  //     .on(
-  //       "postgres_changes",
-  //       { event: "INSERT", schema: "public", table: "tasks" },
-  //       (payload) => {
-  //         const newTask = payload.new as Task;
-  //         setTasks((prev) => [...prev, newTask]);
-  //       }
-  //     )
-  //     .subscribe((status) => {
-  //       console.log("Subscription: ", status);
-  //     });
-  // }, []);
+  useEffect(() => {
+    const channel = supabase.channel("tasks-channel");
+    channel
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "tasks" },
+        (payload) => {
+          const newTask = payload.new as Task;
+          setTasks((prev) => [...prev, newTask]);
+        }
+      )
+      .subscribe((status) => {
+        console.log("Subscription: ", status);
+      });
+  }, []);
 
   const getTasks = async () => {
     const { data, error } = await supabase
