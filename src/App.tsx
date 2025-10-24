@@ -2,9 +2,10 @@ import { useEffect, useState, type FC } from 'react';
 import { TaskManager } from './TaskManager';
 import { Auth } from './Auth';
 import { supabase } from './supabase.client';
+import type { Session } from '@supabase/supabase-js';
 
 export const App: FC = () => {
-  const [session, setSession] = useState<any>(null)
+  const [session, setSession] = useState<Session | null>(null)
 
   const fetchSession = async () => {
     const currentSession = await supabase.auth.getSession();
