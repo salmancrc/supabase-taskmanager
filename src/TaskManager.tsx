@@ -67,13 +67,13 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
 
       setEditingTask(null);
       setNewTask({ title: "", description: "" });
-      await getTasks();
       return;
     }
 
     const { error } = await supabase
       .from("tasks")
       .insert({ ...newtask, email: session.user.email })
+      .select()
       .single();
     if (error) {
       console.error("Error adding task:", error.message);
@@ -81,7 +81,6 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
     }
 
     setNewTask({ title: "", description: "" });
-    await getTasks();
   };
 
   const handleEditTask = (id: number) => {
@@ -97,7 +96,6 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
       console.error("Error deleting task:", error.message);
       return;
     }
-    await getTasks();
   };
 
   return (
