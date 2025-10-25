@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import type { FC } from "react";
+import type { ChangeEvent, FC } from "react";
 import { supabase } from "./supabase.client";
 import type { Session } from "@supabase/supabase-js";
 
@@ -17,6 +17,8 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
   const [newtask, setNewTask] = useState({ title: "", description: "" });
   const [tasks, setTasks] = useState<Task[]>([]);
   const [editingTask, setEditingTask] = useState<number | null>(null);
+  
+  const [taskImage, setTaskImage] = useState<File | null>(null);
 
   useEffect(() => {
     getTasks();
@@ -98,6 +100,12 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
     }
   };
 
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setTaskImage(e.target.files[0])
+    }
+  }
+
   return (
     <div className="min-h-screen bg-zinc-900 flex items-center justify-center py-10">
       <div className="w-full max-w-md bg-zinc-800 rounded-2xl shadow-2xl p-8">
@@ -130,6 +138,7 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
             title="Attach image"
             placeholder="Attach image"
             className="rounded-lg bg-zinc-900 border border-zinc-700 text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 transition"
+            onChange={handleFileChange}
           />
           <div className="flex gap-3">
             <button
