@@ -17,7 +17,6 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
   const [newtask, setNewTask] = useState({ title: "", description: "" });
   const [tasks, setTasks] = useState<Task[]>([]);
   const [editingTask, setEditingTask] = useState<number | null>(null);
-  
   const [taskImage, setTaskImage] = useState<File | null>(null);
 
   useEffect(() => {
@@ -56,6 +55,22 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
     e.preventDefault();
     if (!newtask.title.trim()) return;
 
+    let imageUrl: string | null = null
+    if (taskImage) {
+      imageUrl = await uploadImage(taskImage)
+    }
+
+    const { error } = await supabase
+      .from("tasks")
+      .insert({ ...newtask, email: session.user.email })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error adding task:", error.message);
+      return;
+    }
+
     if (editingTask !== null) {
       const { error } = await supabase
         .from("tasks")
@@ -69,16 +84,6 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
 
       setEditingTask(null);
       setNewTask({ title: "", description: "" });
-      return;
-    }
-
-    const { error } = await supabase
-      .from("tasks")
-      .insert({ ...newtask, email: session.user.email })
-      .select()
-      .single();
-    if (error) {
-      console.error("Error adding task:", error.message);
       return;
     }
 
@@ -102,9 +107,9 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setTaskImage(e.target.files[0])
+      setTaskImage(e.target.files[0]);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-zinc-900 flex items-center justify-center py-10">
@@ -130,7 +135,9 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
               setNewTask((prev) => ({ ...prev, description: e.target.value }))
             }
           />
-          <label htmlFor="task-image" className="sr-only">Attach image</label>
+          <label htmlFor="task-image" className="sr-only">
+            Attach image
+          </label>
           <input
             id="task-image"
             type="file"
