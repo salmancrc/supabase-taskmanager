@@ -11,6 +11,7 @@ interface Task {
   title: string;
   description: string;
   created_at?: string;
+  image_url: string;
 }
 
 export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
@@ -34,6 +35,26 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
           setTasks((prev) => [...prev, newTask]);
         }
       )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "tasks" },
+        (payload) => {
+          const deletedTask = payload.old as Task;
+          setTasks((prev) => prev.filter((task) => task.id !== deletedTask.id));
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "tasks" },
+        (payload) => {
+          const updatedTask = payload.new as Task;
+          setTasks((prev) =>
+            prev.map((task) =>
+              task.id === updatedTask.id ? updatedTask : task
+            )
+          );
+        }
+      )
       .subscribe((status) => {
         console.log("Subscription: ", status);
       });
@@ -51,24 +72,32 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
     setTasks(data ?? []);
   };
 
+  const uploadImage = async (file: File): Promise<string | null> => {
+    const filePath = `${file.name}-${Date.now()}`;
+    const { error } = await supabase.storage
+      .from("tasks_images")
+      .upload(filePath, file);
+
+    if (error) {
+      console.error("Error uploading image:", error.message);
+      return null;
+    }
+
+    const { data } = await supabase.storage
+      .from("tasks_images")
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!newtask.title.trim()) return;
 
-    let imageUrl: string | null = null
+    let imageUrl: string | null = null;
+
     if (taskImage) {
-      imageUrl = await uploadImage(taskImage)
-    }
-
-    const { error } = await supabase
-      .from("tasks")
-      .insert({ ...newtask, email: session.user.email })
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Error adding task:", error.message);
-      return;
+      imageUrl = await uploadImage(taskImage);
     }
 
     if (editingTask !== null) {
@@ -84,6 +113,17 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
 
       setEditingTask(null);
       setNewTask({ title: "", description: "" });
+      return;
+    }
+
+    const { error } = await supabase
+      .from("tasks")
+      .insert({ ...newtask, email: session.user.email, image_url: imageUrl })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error adding task:", error.message);
       return;
     }
 
