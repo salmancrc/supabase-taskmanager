@@ -205,6 +205,15 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
             >
               <h2 className="text-lg font-semibold text-white">{task.title}</h2>
               <p className="text-zinc-300">{task.description}</p>
+              {task.image_url && (
+                <div className="mt-2">
+                  <img
+                    src={task.image_url}
+                    alt={task.title || "Task Image"}
+                    className="max-h-40 w-auto rounded-lg border border-zinc-800 shadow-sm object-cover"
+                  />
+                </div>
+              )}
               <div className="flex gap-3 mt-2">
                 <button
                   onClick={() => handleEditTask(task.id)}
