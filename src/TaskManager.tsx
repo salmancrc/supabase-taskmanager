@@ -122,7 +122,16 @@ export const TaskManager: FC<TaskManagerProps> = ({ session }) => {
               setNewTask((prev) => ({ ...prev, description: e.target.value }))
             }
           />
-          <div className="flex gap-2">
+          <label htmlFor="task-image" className="sr-only">Attach image</label>
+          <input
+            id="task-image"
+            type="file"
+            accept="image/*"
+            title="Attach image"
+            placeholder="Attach image"
+            className="rounded-lg bg-zinc-900 border border-zinc-700 text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 transition"
+          />
+          <div className="flex gap-3">
             <button
               type="submit"
               className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 rounded-lg transition shadow flex-1"
